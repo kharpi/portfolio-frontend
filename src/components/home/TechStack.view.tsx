@@ -1,10 +1,11 @@
-import { Techs } from 'src/Techs';
 import MoreChevron from '../ui/MoreChevron.ui';
 import { STechStack } from './styles/TechStack.style';
 import ReactWordcloud, { MinMaxPair } from 'react-wordcloud';
 import { useEffect, useState } from 'react';
 import { IDarkMode } from 'src/redux/types';
 import { connect } from 'react-redux';
+import { ITechs } from './interfaces/ITechStack.type';
+import axios from 'axios';
 
 const TechStackView: React.FC<IDarkMode> = (props): React.ReactElement => {
 	const [options, setOptions] = useState({
@@ -20,9 +21,16 @@ const TechStackView: React.FC<IDarkMode> = (props): React.ReactElement => {
 		transitionDuration: 1000,
 	});
 
+	const [techs, setTechs] = useState<ITechs>();
+
 	useEffect(() => {
 		const toggled: string | null = localStorage.getItem('applicationState');
 		if (toggled) setOptions({ ...options, colors: ['#fff'] });
+		axios
+			.get<ITechs>('https://portfolio-backend.tamaskarpati.hu/techs')
+			.then((response) => {
+				setTechs(response.data);
+			});
 		//eslint-disable-next-line
 	}, []);
 
@@ -39,7 +47,15 @@ const TechStackView: React.FC<IDarkMode> = (props): React.ReactElement => {
 			<div className='my-container'>
 				<h2 className='my-lead'>Techstack</h2>
 				<STechStack>
-					{<ReactWordcloud options={options} words={Techs} />}
+					{techs && (
+						<ReactWordcloud
+							options={options}
+							words={techs.message.map((t) => ({
+								text: t.text,
+								value: t.value,
+							}))}
+						/>
+					)}
 				</STechStack>
 			</div>
 			<MoreChevron multiply={2} />
