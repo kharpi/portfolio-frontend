@@ -11,14 +11,14 @@ const TechStackView: React.FC<IDarkMode> = (props): React.ReactElement => {
 	const [options, setOptions] = useState({
 		colors: ['#000'],
 		enableTooltip: false,
-		deterministic: false,
+		deterministic: true,
 		fontFamily: 'impact',
 		fontStyle: 'normal',
 		fontWeight: 'normal',
-		padding: 1,
-		rotations: 3,
+		padding: 0,
+		rotations: 0,
 		fontSizes: [15, 40] as MinMaxPair,
-		transitionDuration: 1000,
+		transitionDuration: 200,
 	});
 
 	const [techs, setTechs] = useState<ITechs>();
